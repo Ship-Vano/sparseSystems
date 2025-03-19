@@ -24,4 +24,8 @@ add_executable(createMesh
         src/sparseMethods/FIleMethods.cpp
         src/sparseMethods/RootLevelMethods.cpp
         src/sparseMethods/RootLevelMethods.h
+        src/sparseMethods/InitialNodeMethods.cpp
+        src/sparseMethods/InitialNodeMethods.h
+        src/sparseMethods/MatrixOptimizationMethods.h
+        src/sparseMethods/MatrixOptimizationMethods.cpp
 )

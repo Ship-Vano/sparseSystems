@@ -24,15 +24,16 @@ struct Comparator {
     std::vector<size_t> XADJ;
 };
 
-// Функция
+
 /** Построение корневой структуры уровней(ЛР3)
  *
  * @param root      - корневой элемент
  * @param XADJ      - массив для статической матрицы
+ * @param ADJ      - массив для статической матрицы
  * @param NP        - количество узлов
  *
  * */
-std::vector<std::vector<size_t>> Level_Structure(size_t& root, std::vector<size_t>& XADJ, std::vector<size_t> ADJ, size_t& NP)
+std::vector<std::vector<size_t>> Level_Structure(size_t& root, std::vector<size_t>& XADJ, std::vector<size_t>& ADJ, size_t& NP)
 {
     std::vector<bool> exist(NP, true);
     std::vector<std::vector<size_t>> res;

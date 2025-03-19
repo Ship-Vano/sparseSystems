@@ -33,52 +33,6 @@ vector<size_t> ENV;  // статической матрицы смежности
 
 
 
-
-
-
-
-
-
-
-// Функция поиска начального узла
-size_t Find_Initial_Node()
-{
-	size_t res = 1;
-	size_t buf = 1;
-	size_t prev_size = 0;
-	size_t prev_nbrs = 0;
-	size_t degree = 0;
-	size_t min_degree = NP;
-
-	vector<vector<size_t>> lev_struct;
-
-	do
-	{
-		res = buf;
-
-		lev_struct = Level_Structure(res);
-
-		min_degree = NP;
-		prev_size = lev_struct.size();
-		prev_nbrs = lev_struct.back().size();
-
-		for (const auto& w : lev_struct.back())
-		{
-			degree = XADJ[w] - XADJ[w - 1];
-
-			if (degree < min_degree)
-			{
-				min_degree = degree;
-				buf = w;
-			}
-		}
-
-		lev_struct = Level_Structure(buf);
-	} while (lev_struct.size() > prev_size || lev_struct.back().size() > prev_nbrs);
-
-	return res;
-}
-
 // Сравнение старых номеров узлов
 bool cmp_RCM(const vector<size_t>& v1, const vector<size_t>& v2)
 {
@@ -165,7 +119,7 @@ int main()
 
 	//Write_File_Level_Structure(1, "C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//level_struct_1_out.txt");
 
-	cout << "Pseudo-peripheral node: " << Find_Initial_Node() << "\n";
+	//cout << "Pseudo-peripheral node: " << Find_Initial_Node() << "\n";
 
 	Reverse_Cuthill_Mckey();
 
