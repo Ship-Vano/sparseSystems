@@ -33,55 +33,6 @@ vector<size_t> ENV;  // статической матрицы смежности
 
 
 
-// Сравнение старых номеров узлов
-bool cmp_RCM(const vector<size_t>& v1, const vector<size_t>& v2)
-{
-	return v1[1] < v2[1];
-}
-
-// Алгоритм Картхелла-Макки
-void Reverse_Cuthill_Mckey()
-{
-	size_t root = Find_Initial_Node();
-
-	vector<vector<size_t>> lev_struct = Level_Structure(root);
-
-	for (const auto& u : lev_struct)
-		for (const auto& w : u)
-			RCM.push_back(w);
-
-	vector<vector<size_t>> permutation;
-
-	vector<size_t> buf(2, 0);
-
-	for (size_t i = 1; i <= NP; ++i)
-	{
-		buf = { i, RCM[i - 1] };
-		permutation.push_back(buf);
-	}
-
-	sort(permutation.begin(), permutation.end(), cmp_RCM);
-
-	for (const auto& w : permutation)
-		IRCM.push_back(w[0]);
-
-	size_t it = 0;
-
-	for (const auto& w : RCM)
-	{
-		XENV.push_back(ENV.size() + 1);
-
-		it = ENV.size();
-
-		for (size_t i = XADJ[w - 1]; i < XADJ[w]; ++i)
-			ENV.push_back(IRCM[ADJ[i - 1] - 1]);
-
-		sort(ENV.begin() + it, ENV.end());
-	}
-
-	XENV.push_back(ENV.size() + 1);
-	ENV.push_back(0);
-}
 
 
 
@@ -121,11 +72,11 @@ int main()
 
 	//cout << "Pseudo-peripheral node: " << Find_Initial_Node() << "\n";
 
-	Reverse_Cuthill_Mckey();
+	//Reverse_Cuthill_Mckey();
 
-	Write_File_Renumbered("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_stat_out.txt");
+	//Write_File_Renumbered("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_stat_out.txt");
 
-	Write_File_Renumbered_Mesh("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_mesh_out.txt");
+	//Write_File_Renumbered_Mesh("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_mesh_out.txt");
 
 	cout << "Span size before renumbering: " << Span_Size(XADJ, ADJ) << "\n";
 
