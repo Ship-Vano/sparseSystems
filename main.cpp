@@ -36,80 +36,9 @@ vector<size_t> ENV;  // статической матрицы смежности
 
 
 
-// Процедура записи в файл
-void Write_File_Matrices(const string& file)
-{
-	ofstream Fout(file);
 
-	Fout << "Dynamic matrix: \n" << HEAD << "\n" << NBRS << "\n" << LINK << "\n \n";
-	Fout << "Static  matrix: \n";
 
-	for (size_t i = 1; i <= NP + 1; ++i)
-		Fout << i << "  ";
 
-	Fout << "\n" << XADJ << "\n" << ADJ << "\n";
-
-	Fout.close();
-}
-
-// Сравнение количества соседей
-bool cmp(const size_t i, const size_t j)
-{
-	return XADJ[i] - XADJ[i - 1] < XADJ[j] - XADJ[j - 1];
-}
-
-// Функция построения корневой структуры уровней
-vector<vector<size_t>> Level_Structure(size_t root)
-{
-	vector<bool> exist(NP, true);
-	vector<vector<size_t>> res;
-	vector<size_t> prev;
-	vector<size_t> cur;
-
-	prev.push_back(root);
-	res.push_back(prev);
-
-	size_t n = 1;
-	exist[root - 1] = false;
-
-	while (n < NP)
-	{
-		cur.resize(0);
-
-		for (const auto& w : prev)
-		{
-			for (size_t i = XADJ[w - 1] - 1; i < XADJ[w] - 1; ++i)
-				if (exist[ADJ[i] - 1])
-				{
-					cur.push_back(ADJ[i]);
-					exist[ADJ[i] - 1] = false;
-					++n;
-				}
-		}
-
-		sort(cur.begin(), cur.end(), cmp);
-
-		res.push_back(cur);
-		prev = cur;
-	}
-
-	return res;
-}
-
-// Функция записи корневой структуры уровней в файл
-void Write_File_Level_Structure(size_t root, string file)
-{
-	ofstream Fout(file);
-
-	vector<vector<size_t>> res = Level_Structure(root);
-
-	Fout << "Level structure : \n";
-
-	for (const auto& w : res)
-		Fout << w << "\n";
-
-	Fout.close();
-}
 
 // Функция поиска начального узла
 size_t Find_Initial_Node()
@@ -226,15 +155,15 @@ size_t Span_Size(const vector<size_t>& xadj, const vector<size_t>& adj)
 
 int main()
 {
-	Read_File("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//output_4_2.txt");
+	//Read_File("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//output_4_2.txt");
 
-	Dynamic_Matrix();
+	//Dynamic_Matrix();
 
-	Static_Matrix();
+	//Static_Matrix();
 
-	Write_File_Matrices("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//stat_dyn_out.txt");
+	//Write_File_Matrices("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//stat_dyn_out.txt");
 
-	Write_File_Level_Structure(1, "C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//level_struct_1_out.txt");
+	//Write_File_Level_Structure(1, "C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//level_struct_1_out.txt");
 
 	cout << "Pseudo-peripheral node: " << Find_Initial_Node() << "\n";
 

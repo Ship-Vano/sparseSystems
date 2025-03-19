@@ -4,6 +4,8 @@
 /*Методы для чтения параметров для ЛР из файлов*/
 //TODO: вынести имплементации в .cpp файл, а здесь оставить только объявления
 
+#include "RootLevelMethods.h"
+
 #include <fstream>
 #include <vector>
 
@@ -70,6 +72,65 @@ bool Read_File(const std::string& filePath, size_t& NP, size_t& NE, size_t& NC, 
     return false;
 }
 
+
+/** Запись матрицы в файл (ЛР2)
+ *
+ * @param filePath  - путь до файла
+ * @param HEAD      - массив для динамической матрицы
+ * @param NBRS      - массив для динамической матрицы
+ * @param LINK      - массив для динамической матрицы
+ * @param NP        - количество узлов
+ * @param XADJ      - массив для статической матрицы
+ * @param ADJ       - массив для статической матрицы
+ *
+ * @return true - если успех, false - если ошибка
+ */
+bool Write_File_Matrices(const std::string& filePath, const std::vector<int>& HEAD, \
+                        const std::vector<size_t>& NBRS, const std::vector<int>& LINK, const size_t& NP,\
+                        const std::vector<size_t>& XADJ, const std::vector<size_t> ADJ)
+{
+    std::ofstream Fout(filePath);
+    if(Fout.is_open()){
+        Fout << "Dynamic matrix: \n" << HEAD << "\n" << NBRS << "\n" << LINK << "\n \n";
+        Fout << "Static  matrix: \n";
+
+        for (size_t i = 1; i <= NP + 1; ++i)
+            Fout << i << "  ";
+
+        Fout << "\n" << XADJ << "\n" << ADJ << "\n";
+
+        Fout.close();
+        return true;
+    }
+    return false;
+}
+
+/** Запись  корневой структуры уровней в файл (ЛР3)
+ *
+ * @param root      - корневой элемент
+ * @param filePath  - путь до файла
+ * @param XADJ      - массив для статической матрицы
+ * @param ADJ       - массив для статической матрицы
+ * @param NP        - количество узлов
+ *
+ * @return true - если успех, false - если ошибка
+ */
+bool Write_File_Level_Structure(size_t root, std::string filePath, std::vector<size_t>& XADJ, std::vector<size_t>& ADJ, size_t& NP)
+{
+    std::ofstream Fout(filePath);
+    if(Fout.is_open()){
+        std::vector<std::vector<size_t>> res = Level_Structure(root, XADJ, ADJ, NP);
+
+        Fout << "Level structure : \n";
+
+        for (const auto& w : res)
+            Fout << w << "\n";
+
+        Fout.close();
+        return true;
+    }
+    return false;
+}
 
 /** Запись векторов перенумерации и новой статической матрицы смежности (ЛР5)
  *

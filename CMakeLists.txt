@@ -22,4 +22,6 @@ add_executable(createMesh
         src/sparseMethods/AdjacencyMethods.cpp
         src/sparseMethods/FileMethods.h
         src/sparseMethods/FIleMethods.cpp
+        src/sparseMethods/RootLevelMethods.cpp
+        src/sparseMethods/RootLevelMethods.h
 )
