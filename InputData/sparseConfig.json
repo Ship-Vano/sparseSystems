@@ -1,0 +1,7 @@
+{
+  "meshFileName": "OutputData/mesh1_output.txt",
+  "matrixOutputFile": "OutputData/mesh1_output_matrix.txt",
+  "levelStructureOutputFile": "OutputData/mesh1_output_level_structure.txt",
+  "renumberedOutputFile": "OutputData/mesh1_output_renumberation.txt",
+  "renumberedMeshOutputFile": "OutputData/mesh1_output_renumbered_mesh.txt"
+}

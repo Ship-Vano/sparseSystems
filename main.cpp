@@ -1,86 +1,74 @@
+#include "json/json.h"
+#include "src/sparseMethods/MatrixOptimizationMethods.h"
+#include "src/sparseMethods/RootLevelMethods.h"
+#include "src/sparseMethods/InitialNodeMethods.h"
+#include "src/sparseMethods/FileMethods.h"
+#include "src/sparseMethods/AdjacencyMethods.h"
+
 #include <iostream>
-#include <vector>
-#include <fstream>
-#include <cmath>
-#include <algorithm>
+#include <cassert>
 
-using namespace std;
-
-size_t NP = 0; // Количество узлов
-size_t NE = 0; // Количество элементов
-size_t NC = 0; // Количество контуров
-
-size_t elem_t = 0; // Тип элемента
-
-vector<size_t> Elem;   // Массив элементов
-vector<double> Points; // Массив точек
-vector<size_t> Cont;   // Массив узлов на контуре
-
-vector<int> HEAD;    // Массивы для
-vector<size_t> NBRS; // динамической
-vector<int> LINK;    // матрицы
-
-vector<size_t> XADJ; // Массивы для статической
-vector<size_t> ADJ;  // матрицы смежности
-
-vector<size_t> RCM;  // Вектор перестановки
-vector<size_t> IRCM; // Вектор обратной перестановки
-
-vector<size_t> XENV; // Новые массивы для
-vector<size_t> ENV;  // статической матрицы смежности
-
-
-
-
-
-
-
-
-// Функция проверки ребра i <-> j
-bool Is_Neighbours(const size_t i, const size_t j, const vector<size_t>& xadj, const vector<size_t>& adj)
-{
-	return find(adj.begin() + xadj[i - 1] - 1, adj.begin() + xadj[i] - 1, j) != adj.begin() + xadj[i] - 1;
-}
-
-// Функция вычисления размера оболочки
-size_t Span_Size(const vector<size_t>& xadj, const vector<size_t>& adj)
-{
-	size_t res = 0;
-
-	for (size_t i = 1; i <= NP; ++i)
-		for (size_t j = 1; j <= i; ++j)
-			if (Is_Neighbours(i, j, xadj, adj))
-			{
-				res += i - j;
-				break;
-			}
-
-	return res;
-}
 
 int main()
 {
-	//Read_File("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//output_4_2.txt");
+    std::string configPath = "InputData/sparseConfig.json";
+    std::ifstream in(configPath, std::ios::in);
+    Json::Reader json_reader;
+    Json::Value json_root;
+    bool read_succeeded = json_reader.parse(in, json_root);
+    assert(read_succeeded);
 
-	//Dynamic_Matrix();
+    // инициализация рабочих переменных
+    size_t NP = 0; // Количество узлов
+    size_t NE = 0; // Количество элементов
+    size_t NC = 0; // Количество контуров
 
-	//Static_Matrix();
+    size_t elem_t = 0; // Тип элемента
 
-	//Write_File_Matrices("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//stat_dyn_out.txt");
+    std::vector<size_t> Elem;   // Массив элементов
+    std::vector<double> Points; // Массив точек
+    std::vector<size_t> Cont;   // Массив узлов на контуре
 
-	//Write_File_Level_Structure(1, "C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//level_struct_1_out.txt");
+    std::vector<int> HEAD;    // Массивы для
+    std::vector<size_t> NBRS; // динамической
+    std::vector<int> LINK;    // матрицы
 
-	//cout << "Pseudo-peripheral node: " << Find_Initial_Node() << "\n";
+    std::vector<size_t> XADJ; // Массивы для статической
+    std::vector<size_t> ADJ;  // матрицы смежности
 
-	//Reverse_Cuthill_Mckey();
+    std::vector<size_t> RCM;  // Вектор перестановки
+    std::vector<size_t> IRCM; // Вектор обратной перестановки
 
-	//Write_File_Renumbered("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_stat_out.txt");
+    std::vector<size_t> XENV; // Новые массивы для
+    std::vector<size_t> ENV;  // статической матрицы смежности
 
-	//Write_File_Renumbered_Mesh("C://Users//-//Desktop//свiт//4 курс//РПК//Лабы//Лаб 2-5//new_mesh_out.txt");
+    std::string meshFileName = json_root.get("meshFileName", "").asString();
+    std::string matrixOutputFile = json_root.get("matrixOutputFile", "").asString();
+    std::string levelStructureOutputFile = json_root.get("levelStructureOutputFile", "").asString();
+    std::string renumberedOutputFile = json_root.get("renumberedOutputFile", "").asString();
+    std::string renumberedMeshOutputFile = json_root.get("renumberedMeshOutputFile", "").asString();
 
-	cout << "Span size before renumbering: " << Span_Size(XADJ, ADJ) << "\n";
+    Read_File(meshFileName, NP,NE,NC,elem_t, Elem,Points,Cont);
 
-	cout << "Span size after renumbering: " << Span_Size(XENV, ENV) << "\n";
+	Dynamic_Matrix(HEAD, NBRS, LINK, NP, NE,elem_t, Elem);
+
+	Static_Matrix(HEAD, XADJ, ADJ, NBRS, LINK,NP);
+
+	Write_File_Matrices(matrixOutputFile, HEAD, NBRS, LINK,NP,XADJ,ADJ);
+
+	Write_File_Level_Structure(1, levelStructureOutputFile, XADJ, ADJ, NP);
+
+	std::cout << "Pseudo-peripheral node: " << Find_Initial_Node(NP, XADJ, ADJ) << std::endl;
+
+	Reverse_Cuthill_Mckey(NP,XADJ,ADJ,RCM,IRCM,XENV,ENV);
+
+	Write_File_Renumbered(renumberedOutputFile, RCM,IRCM,NP,XENV,ENV);
+
+	Write_File_Renumbered_Mesh(renumberedMeshOutputFile,NP,NE,NC,elem_t, Elem,Points,Cont,RCM,IRCM);
+
+	std::cout << "Span size before renumbering: " << Span_Size(XADJ, ADJ, NP) << std::endl;
+
+    std::cout << "Span size after renumbering: " << Span_Size(XENV, ENV, NP) << std::endl;
 
 	return 0;
 }
