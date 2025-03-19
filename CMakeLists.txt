@@ -9,11 +9,17 @@ include_directories(${CMAKE_SOURCE_DIR}/OutputData)
 include_directories(${CMAKE_SOURCE_DIR}/src/mesh)
 
 add_executable(sparseSystems main.cpp
-        src/mesh/meshCreator.cpp)
+        src/sparseMethods/AdjacencyMethods.cpp
+        src/sparseMethods/FIleMethods.cpp
+)
 
 add_executable(createMesh
         src/mesh/meshCreator.cpp
         src/mesh/Functions.cpp
         src/mesh/Create_Web.cpp
         src/include/json/jsoncpp.cpp
+        src/sparseMethods/AdjacencyMethods.h
+        src/sparseMethods/AdjacencyMethods.cpp
+        src/sparseMethods/FileMethods.h
+        src/sparseMethods/FIleMethods.cpp
 )

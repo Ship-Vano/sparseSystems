@@ -29,50 +29,8 @@ vector<size_t> IRCM; // Вектор обратной перестановки
 vector<size_t> XENV; // Новые массивы для
 vector<size_t> ENV;  // статической матрицы смежности
 
-// Перегрузка оператора "cout" для vector
-template<typename T>
-ostream& operator<<(ostream& str, const vector<T>& vec)
-{
-	for (auto& w : vec)
-		str << w << "  ";
 
-	return str;
-};
 
-// Процедура чтения из файла
-void Read_File(const string& file)
-{
-	ifstream Fin(file);
-
-	size_t buf = 0;
-
-	Fin >> NE >> NP >> NC >> buf >> elem_t;
-
-	Elem.resize(elem_t * NE, 0);
-	Points.resize(3 * NP, 0);
-
-	for (size_t j = 0; j < elem_t; ++j)
-		Fin >> Elem[j];
-
-	for (size_t i = 1; i < NE; ++i)
-	{
-		Fin >> buf >> buf;
-		for (size_t j = 0; j < elem_t; ++j)
-			Fin >> Elem[elem_t * i + j];
-	}
-
-	for (size_t i = 0; i < NP; ++i)
-		Fin >> buf >> Points[3 * i] >> Points[3 * i + 1] >> Points[3 * i + 2];
-
-	Fin >> buf;
-
-	Cont.resize(buf, 0);
-
-	for (size_t i = 0; i < buf; ++i)
-		Fin >> Cont[i];
-
-	Fin.close();
-}
 
 // Добавление ребра i -> j
 void Dynamic_Add(const size_t i, const size_t j)
@@ -314,52 +272,7 @@ void Reverse_Cuthill_Mckey()
 	ENV.push_back(0);
 }
 
-// Функция записи векторов перенумерации и новой статической матрицы смежности
-void Write_File_Renumbered(string file)
-{
-	ofstream Fout(file);
 
-	Fout << "RCM:  " << RCM << "\n" << "IRCM: " << IRCM << "\n \n";
-
-	Fout << "New static matrix: \n";
-
-	for (size_t i = 1; i <= NP + 1; ++i)
-		Fout << i << "  ";
-
-	Fout << "\n" << XENV << "\n" << ENV << "\n";
-
-	Fout.close();
-}
-
-// Функция записи перенумерованной сетки
-void Write_File_Renumbered_Mesh(string file)
-{
-	ofstream Fout(file);
-
-	Fout << NE << " " << NP << " " << NC << "\n";
-
-	for (size_t i = 0; i < NE; ++i)
-	{
-		Fout << i + 1 << " " << elem_t << " ";
-
-		for (size_t j = 0; j < elem_t; ++j)
-			Fout << IRCM[Elem[elem_t * i + j] - 1] << " ";
-
-		Fout << "\n";
-	}
-
-	size_t it = 0;
-
-	for (const auto& w : RCM)
-		Fout << ++it << " " << Points[3 * (w - 1)] << " " << Points[3 * (w - 1) + 1] << " " << Points[3 * (w - 1) + 2] << "\n";
-
-	Fout << Cont.size() << "\n";
-
-	for (const auto& w : Cont)
-		Fout << IRCM[w - 1] << "\n";
-
-	Fout.close();
-}
 
 // Функция проверки ребра i <-> j
 bool Is_Neighbours(const size_t i, const size_t j, const vector<size_t>& xadj, const vector<size_t>& adj)
