@@ -1,7 +1,7 @@
 /* ### ЛАБОРАТОРНАЯ РАБОТА №3 ### */
 
 #include "Functions.h"       // Функции лабораторной работы
-#include "json/json.h"
+#include "../include/json/json.h"
 #include <cassert>
 int main() {
 

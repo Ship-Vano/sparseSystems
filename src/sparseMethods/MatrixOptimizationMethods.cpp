@@ -24,7 +24,7 @@ void Reverse_Cuthill_Mckey(size_t &NP, std::vector<size_t> &XADJ, std::vector<si
         permutation.push_back(buf);
     }
 
-    sort(permutation.begin(), permutation.end(), cmp_RCM);
+    std::sort(permutation.begin(), permutation.end(), cmp_RCM);
 
     for (const auto& w : permutation)
         IRCM.push_back(w[0]);

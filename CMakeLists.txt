@@ -8,6 +8,7 @@ include_directories(${CMAKE_SOURCE_DIR}/InputData)
 include_directories(${CMAKE_SOURCE_DIR}/OutputData)
 include_directories(${CMAKE_SOURCE_DIR}/src/mesh)
 include_directories(${CMAKE_SOURCE_DIR}/src/sparseMethods)
+include_directories(${CMAKE_SOURCE_DIR}/src/include/json)
 
 add_executable(sparseSystems
         main.cpp

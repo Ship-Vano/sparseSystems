@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 /** Сравнение количества соседей (ЛР3)
  *

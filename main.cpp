@@ -1,4 +1,4 @@
-#include "json/json.h"
+#include "src/include/json/json.h"
 #include "src/sparseMethods/MatrixOptimizationMethods.h"
 #include "src/sparseMethods/RootLevelMethods.h"
 #include "src/sparseMethods/InitialNodeMethods.h"
@@ -58,7 +58,11 @@ int main()
 
 	Write_File_Level_Structure(1, levelStructureOutputFile, XADJ, ADJ, NP);
 
-	std::cout << "Pseudo-peripheral node: " << Find_Initial_Node(NP, XADJ, ADJ) << std::endl;
+	size_t pseudo = Find_Initial_Node(NP, XADJ, ADJ);
+
+	std::cout << "Pseudo-peripheral node: " << pseudo << std::endl;
+
+	Write_File_Level_Structure(pseudo, levelStructureOutputFile, XADJ, ADJ, NP);
 
 	Reverse_Cuthill_Mckey(NP,XADJ,ADJ,RCM,IRCM,XENV,ENV);
 
